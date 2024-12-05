@@ -1,9 +1,12 @@
 package com.example.schedule.controller;
 
 import com.example.schedule.dto.ScheduleRequestDto;
+import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.service.ScheduleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -19,5 +22,21 @@ public class ScheduleController {
     public ResponseEntity<String> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
         scheduleService.createSchedule(requestDto);
         return ResponseEntity.ok("일정이 성공적으로 생성되었습니다.");
+    }
+    // 전체 일정 조회
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(
+            @RequestParam(required = false) String updatedDate, // 수정일 필터
+            @RequestParam(required = false) String author // 작성자 필터
+    ) {
+        List<ScheduleResponseDto> schedules = scheduleService.findAllSchedules(updatedDate, author);
+        return ResponseEntity.ok(schedules);
+    }
+
+    // 단건 일정 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id) {
+        ScheduleResponseDto schedule = scheduleService.findScheduleById(id);
+        return ResponseEntity.ok(schedule);
     }
 }
