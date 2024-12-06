@@ -9,3 +9,4 @@ public class ScheduleRequestDto {
     private String password; // 비밀번호
     private String content; // 내용
 }
+

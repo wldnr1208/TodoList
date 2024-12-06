@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,20 @@ public class ScheduleRepository {
         List<Schedule> schedules = jdbcTemplate.query(sql, new ScheduleRowMapper(), id);
         return schedules.stream().findFirst();
     }
+
+
+    // 일정 수정
+    public void update(Long id, String title, String author, LocalDateTime updatedAt) {
+        String sql = "UPDATE schedule SET TITLE = ?, AUTHOR = ?, UPDATED_AT = ? WHERE ID = ?";
+        jdbcTemplate.update(sql, title, author, updatedAt, id);
+    }
+
+    // 일정 삭제
+    public void deleteById(Long id) {
+        String sql = "DELETE FROM schedule WHERE ID = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
 
     private static class ScheduleRowMapper implements RowMapper<Schedule> {
         @Override
